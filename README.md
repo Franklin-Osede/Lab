@@ -2,7 +2,7 @@
 
 ## About the Repository
 
-The **Lab Repository** is a collection of diverse projects that explore various programming languages, frameworks, and tools. It serves as a playground for experimenting with and demonstrating skills in frontend and backend development, CI/CD pipelines, cloud infrastructure, and much more. This repository is ideal for learning, experimenting, and showcasing projects across multiple technologies.
+The **Lab Repository** is a collection of diverse projects that explore various programming languages, frameworks, and tools. It serves as a playground for experimenting with and demonstrating skills in frontend and backend development, CI/CD pipelines, cloud infrastructure, blockchain, and much more. This repository is ideal for learning, experimenting, and showcasing projects across multiple technologies.
 
 ---
 
@@ -23,6 +23,7 @@ The repository is organized into directories, each containing projects for a spe
 
 - **`nestjs/`**:
   - Backend projects built with NestJS, focusing on RESTful API creation, microservices, WebSocket communication, and database integration with tools like TypeORM or Prisma.
+  - Examples include authentication, role-based access control, and real-time notifications.
 
 - **`java/`**:
   - Java-based applications, including backend development with Spring Boot and standalone Java programs for algorithms and data structures.
@@ -37,6 +38,18 @@ The repository is organized into directories, each containing projects for a spe
 
 - **`python/`**:
   - Python scripts and projects, including machine learning models, data analysis with Pandas, and API creation using Flask or FastAPI.
+
+- **`solidity/`**:
+  - Smart contract development for blockchain applications.
+  - Includes examples of ERC-20 and ERC-721 tokens, decentralized applications (dApps), and integration with Web3.js.
+
+- **`rust/`**:
+  - Projects exploring Rust for system-level programming, blockchain development, and performance-critical applications.
+  - Examples include simple CLI tools, concurrency patterns, and integration with Substrate for blockchain development.
+
+- **`devops/`**:
+  - Projects and scripts related to DevOps practices.
+  - Includes containerization with Docker, orchestration with Kubernetes, and configuration management using Ansible.
 
 - **`misc/`**:
   - Other projects and experiments that don’t fit into the main categories, such as blockchain experiments, mobile app development, and system utilities.
@@ -55,6 +68,9 @@ Ensure you have the necessary tools installed for the specific projects you want
 - **Java** and **Maven** for Java projects.
 - **Python** and **pip** for Python projects.
 - **Terraform CLI** for Terraform configurations.
+- **Solidity tools** like Truffle, Hardhat, or Remix for blockchain projects.
+- **Rust** and **Cargo** for Rust-based projects.
+- **Docker** and **Kubernetes** for DevOps-related projects.
 
 ---
 
@@ -94,12 +110,6 @@ Contributions are welcome! If you have ideas or improvements for any project, fo
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-## Project Link
-
-[GitHub Repository](https://github.com/yourusername/lab)
 
 ---
 
