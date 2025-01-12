@@ -1,21 +1,4 @@
 terraform {
-  #backend "remote" {
-  #  hostname = "app.terraform.io"
-  #  organization = "ExamPro"
-
-  #  workspaces {
-  #    name = "getting-started"
-  #  }
-  #}
-  cloud {
-    hostname = "app.terraform.io"
-    organization = "ExamPro"
-
-    workspaces {
-      name = "getting-started"
-    }
-  }
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -24,6 +7,18 @@ terraform {
   }
 }
 
-locals {
-  project_name = "Andrew"
+
+
+provider "aws" {
+  profile = default
+  region  = "us-east-1"
+}
+
+resource "aws_instance" "my_server" {
+  ami           = ""
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "MyServer"
+  }
 }
