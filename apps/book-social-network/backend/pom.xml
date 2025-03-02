@@ -10,13 +10,13 @@
   <packaging>jar</packaging>
 
   <name>Book Social Network Backend</name>
-  <description>Backend for Book Social Network using Spring Boot and TDD</description>
+  <description>Backend for Book Social Network using Spring Boot, TDD and Kafka</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.12</version>
-    <relativePath/> <!-- Lookup parent from repository -->
+    <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
   <properties>
@@ -24,30 +24,36 @@
   </properties>
 
   <dependencies>
-    <!-- Dependencia para construir APIs REST -->
+    <!-- API REST con Spring Boot -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
-    <!-- Dependencia para pruebas (JUnit, Mockito, etc.) -->
+    <!-- Spring Boot Starter Test para TDD -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
 
-    <!-- Dependencia para acceso a datos con JPA (opcional, si planeas persistir usuarios y otros datos) -->
+    <!-- Spring Data JPA para persistencia -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
-    <!-- Base de datos H2 para pruebas en memoria (opcional) -->
+    <!-- Base de datos H2 para pruebas en memoria -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
+    </dependency>
+
+    <!-- Dependencia para Kafka -->
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
     </dependency>
   </dependencies>
 
