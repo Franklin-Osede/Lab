@@ -1,0 +1,62 @@
+[profile.default]
+src = 'contracts'
+out = 'out'
+libs = ['lib']
+remappings = [
+    '@openzeppelin/contracts/=node_modules/@openzeppelin/contracts/',
+    '@openzeppelin/contracts-upgradeable/=node_modules/@openzeppelin/contracts-upgradeable/',
+    'forge-std/=lib/forge-std/src/',
+    'ds-test/=lib/ds-test/src/'
+]
+
+# Test configuration
+[profile.default.fuzz]
+runs = 10000
+max_test_rejects = 65536
+seed = '0x3e8'
+dictionary_weight = 40
+include_storage = true
+include_push_bytes = true
+
+[profile.default.invariant]
+runs = 256
+depth = 500
+fail_on_revert = false
+call_override = false
+dictionary_weight = 80
+include_storage = true
+include_push_bytes = true
+
+# Optimization configuration
+[profile.default.optimizer]
+enabled = true
+runs = 200
+
+# Gas configuration
+[profile.default.gas_reports]
+enabled = true
+exclude = []
+
+# Coverage configuration
+[profile.default.coverage]
+enabled = true
+exclude = []
+
+# CI configuration
+[profile.ci]
+fuzz = { runs = 10000 }
+invariant = { runs = 1000, depth = 1000 }
+
+# Local development configuration
+[profile.dev]
+fuzz = { runs = 1000 }
+invariant = { runs = 100, depth = 100 }
+
+# RPC configuration
+[rpc_endpoints]
+mainnet = "https://eth-mainnet.alchemyapi.io/v2/your-api-key"
+polygon = "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
+
+[etherscan]
+mainnet = { key = "${ETHERSCAN_API_KEY}" }
+polygon = { key = "${POLYGONSCAN_API_KEY}" } 
