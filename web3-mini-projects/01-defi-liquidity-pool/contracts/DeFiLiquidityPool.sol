@@ -16,7 +16,6 @@ import "./libraries/LiquidityMath.sol";
  */
 contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable {
     using SafeERC20 for IERC20;
-    using LiquidityMath for uint256;
 
     // ============ State Variables ============
     
@@ -28,14 +27,11 @@ contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable
     uint256 public totalLiquidityTokens;
     
     mapping(address => uint256) public liquidityTokens;
-    mapping(address => uint256) public userRewards;
-    mapping(address => uint256) public lastRewardClaim;
     
     // Advanced configuration
     uint256 public constant MINIMUM_LIQUIDITY = 10**3;
     uint256 public constant FEE_DENOMINATOR = 10000;
     uint256 public dynamicFeeRate = 30; // 0.3% initial
-    uint256 public protocolFeeRate = 5; // 0.05%
     uint256 public maxSlippageProtection = 500; // 5%
     
     // Automatic rebalancing
@@ -57,7 +53,6 @@ contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable
     
     // Emergency controls
     bool public emergencyMode;
-    uint256 public emergencyWithdrawalDelay = 24 hours;
     
     // ============ Events ============
     // Events are defined in the interface to avoid duplication
@@ -78,13 +73,7 @@ contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable
         _;
     }
     
-    modifier onlyAfterRebalanceInterval() {
-        require(
-            block.timestamp >= lastRebalanceTime + rebalanceInterval,
-            "Rebalance interval not met"
-        );
-        _;
-    }
+
     
     // ============ Constructor ============
     
