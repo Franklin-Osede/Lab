@@ -28,19 +28,14 @@ include_storage = true
 include_push_bytes = true
 
 # Optimization configuration
-[profile.default.optimizer]
-enabled = true
-runs = 200
+optimizer = true
+optimizer_runs = 200
 
 # Gas configuration
-[profile.default.gas_reports]
-enabled = true
-exclude = []
+gas_reports = ["*"]
 
 # Coverage configuration
-[profile.default.coverage]
-enabled = true
-exclude = []
+# coverage = true
 
 # CI configuration
 [profile.ci]
