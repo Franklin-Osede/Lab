@@ -92,6 +92,7 @@ contract MockAttacker {
         // Return the flash loan (no fees - vulnerability)
         // The contract only verifies that balance >= initial
         // It doesn't charge fees, so any profit is pure gain
+        IERC20(token).safeTransfer(msg.sender, amount);
     }
     
     // ============ Price Manipulation Attack ============

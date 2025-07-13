@@ -299,14 +299,18 @@ describe("🚀 DeFi Liquidity Pool - Basic Demo", function () {
       await tokenB.connect(alice).approve(pool.target, liquidityB);
       await pool.connect(alice).addLiquidity(liquidityA, liquidityB, 0);
 
-      // Enable front-run protection
-      await pool.connect(owner).setMEVProtection(5000, 1); // 50% slippage, 1 block front-run protection
+      // Enable front-run protection with higher threshold for testing
+      await pool.connect(owner).setMEVProtection(5000, 10); // 50% slippage, 10 blocks front-run protection
 
       // First transaction
       await tokenA.connect(bob).approve(pool.target, ethers.parseEther("100"));
       await pool.connect(bob).swap(tokenA.target, ethers.parseEther("100"), 0);
 
-      // Try second transaction immediately (same block)
+      // Get current block number
+      const currentBlock = await network.provider.send("eth_blockNumber");
+      console.log(`   🔍 Current block: ${parseInt(currentBlock, 16)}`);
+
+      // Try second transaction immediately (should fail due to block protection)
       await tokenA.connect(bob).approve(pool.target, ethers.parseEther("50"));
       await expect(pool.connect(bob).swap(tokenA.target, ethers.parseEther("50"), 0))
         .to.be.revertedWith("Front-run protection active");

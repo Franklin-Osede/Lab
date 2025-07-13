@@ -62,11 +62,11 @@ contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable
     modifier noFrontRun() {
         if (frontRunProtectionBlocks > 0) {
             require(
-                lastTransactionBlock[msg.sender] + frontRunProtectionBlocks < block.number,
+                lastTransactionBlock[msg.sender] + frontRunProtectionBlocks <= block.number,
                 "Front-run protection active"
             );
-            lastTransactionBlock[msg.sender] = block.number;
         }
+        lastTransactionBlock[msg.sender] = block.number;
         _;
     }
     

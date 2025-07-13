@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/domoblock/Documents/Projycto/Lab/web3-mini-projects/01-defi-liquidity-pool/contracts/DeFiLiquidityPool.sol": {
-      "lastModificationDate": 1752316398522,
-      "contentHash": "f906b2c7164a7ff39a718b854d0535be",
+      "lastModificationDate": 1752396629063,
+      "contentHash": "1327a17a152e6d394ed9b9d3254a554f",
       "sourceName": "contracts/DeFiLiquidityPool.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -502,8 +502,8 @@
       ]
     },
     "/Users/domoblock/Documents/Projycto/Lab/web3-mini-projects/01-defi-liquidity-pool/contracts/mocks/MockAttacker.sol": {
-      "lastModificationDate": 1752316455026,
-      "contentHash": "42952655c633326664d558a15b5e3071",
+      "lastModificationDate": 1752396382095,
+      "contentHash": "96e6f6b7ae3f8a38ed99f442653c14a5",
       "sourceName": "contracts/mocks/MockAttacker.sol",
       "solcConfig": {
         "version": "0.8.24",
