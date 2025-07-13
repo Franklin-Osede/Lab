@@ -1,0 +1,3 @@
+[submodule "web3-mini-projects/01-defi-liquidity-pool/lib/forge-std"]
+	path = web3-mini-projects/01-defi-liquidity-pool/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
