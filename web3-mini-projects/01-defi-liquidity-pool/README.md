@@ -1,383 +1,359 @@
-# 🚀 Advanced DeFi Liquidity Pool
+# 🏦 DeFi Liquidity Pool - Advanced Educational Project
 
-A sophisticated DeFi liquidity pool with advanced features designed to demonstrate professional-level testing with **Hardhat** and **Foundry**. Perfect for educational content and Web3 development demonstrations.
+[![Solidity](https://img.shields.io/badge/Solidity-^0.8.24-blue.svg)](#)
+[![Hardhat](https://img.shields.io/badge/Hardhat-2.19.0-yellow.svg)](#)
+[![Foundry](https://img.shields.io/badge/Foundry-1.2.3-red.svg)](#)
+[![Tests](https://img.shields.io/badge/Tests-19_passing-green.svg)](#tests)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](#license)
 
-## 🎯 Key Features
+> **⚠️ WARNING:** This project is **EDUCATIONAL ONLY**. The contracts contain intentional vulnerabilities to demonstrate security concepts. **DO NOT use in production**.
 
-### 💡 Advanced Functionalities
-- **Automatic Rebalancing**: Pool automatically rebalances based on configurable thresholds
-- **Dynamic Fees**: Commissions adjust based on market volatility
-- **MEV Protection**: Basic protection mechanism against front-running
-- **Flash Loans**: Implementation of instant loans (with controlled vulnerability)
-- **Emergency Mode**: Security controls to pause operations
+## 📋 Project Description
 
-### 🔧 Technical Features
-- **Dual Testing**: Configured for both Hardhat and Foundry
-- **Advanced Fuzzing**: Tests with fuzzing to find edge cases
-- **Invariant Testing**: Verification of mathematical properties
-- **Gas Optimization**: Gas analysis and optimization
-- **Controlled Vulnerabilities**: For educational security demos
+This project implements an **advanced DeFi Liquidity Pool** with professional features and educational vulnerabilities. It includes exhaustive testing with **Hardhat** and **Foundry**, demonstrating blockchain development best practices.
 
-## 🛠️ Installation and Setup
+### 🎯 Main Features
+
+- ✅ **AMM (Automated Market Maker)** with `x * y = k` formula
+- ✅ **Dynamic fees** (0.1% - 1%) based on volatility
+- ✅ **Automatic rebalancing** every 1 hour
+- ✅ **MEV protections** configurable
+- ✅ **Flash loans** (with educational vulnerabilities)
+- ✅ **Emergency mode** to pause operations
+- ✅ **Exhaustive testing** (19 tests total)
+
+---
+
+## 🏗️ Project Structure
+
+```
+web3-mini-projects/01-defi-liquidity-pool/
+├── 📁 contracts/                           # Main contracts
+│   ├── 🏦 DeFiLiquidityPool.sol           # Main contract 
+│   ├── 📁 interfaces/
+│   │   └── 🔗 ILiquidityPool.sol          # Standard interface 
+│   ├── 📁 libraries/
+│   │   └── 🧮 LiquidityMath.sol           # Math library (272 lines)
+│   └── 📁 mocks/
+│       ├── 🔓 MockERC20.sol               # Test token (105 lines)
+│       └── 🎯 MockAttacker.sol            # Attacker contract (246 lines)
+├── 📁 test/                               # Tests
+│   ├── 🔍 DeFiLiquidityPool.basic.test.js # Hardhat tests (368 lines)
+│   └── ⚡ DeFiLiquidityPool.t.sol         # Foundry tests (212 lines)
+├── 📁 scripts/                            # Demo scripts
+│   └── 🎬 demo-setup.js                   # Demo configuration
+├── ⚙️ hardhat.config.js                  # Hardhat configuration
+├── ⚙️ foundry.toml                       # Foundry configuration
+├── 📦 package.json                       # Dependencies and scripts
+└── 📖 README.md                          # This documentation
+```
+
+---
+
+## 🔧 Component Explanation
+
+### 🏦 1. **DeFiLiquidityPool.sol** - Main Contract
+
+**Functionalities:**
+- **Liquidity management:** `addLiquidity()`, `removeLiquidity()`
+- **Swaps:** `swap()` with dynamic fees
+- **Rebalancing:** Automatic based on thresholds
+- **Flash loans:** `flashLoan()` (vulnerable for education)
+- **Protections:** MEV, slippage, emergency
+
+**Technical characteristics:**
+```solidity
+- AMM Formula: x * y = k
+- Dynamic fees: 0.1% - 1%
+- Slippage protection: 20% (configurable)
+- Rebalancing: every 1 hour
+- MEV protection: blocks between transactions
+```
+
+### 🧮 2. **LiquidityMath.sol** - Math Library
+
+**Main functions:**
+- `getAmountOut()` - Output calculation for swaps
+- `calculatePriceImpact()` - Price impact calculation
+- `calculateImpermanentLoss()` - Impermanent loss calculation
+- `sqrt()` - Square root (Babylonian method)
+- `calculateOptimalLiquidity()` - Optimal liquidity calculation
+
+### 🔗 3. **ILiquidityPool.sol** - Standard Interface
+
+Defines the standard contract with:
+- 📝 Main events
+- 🔧 Liquidity functions
+- 🔄 Swap functions
+- 👀 Query functions
+- 🛡️ Administrative functions
+
+### 🔓 4. **MockERC20.sol** - Test Token
+
+Simulates real tokens (USDC/USDT) with special functions:
+- `mint()` - Create tokens
+- `burn()` - Destroy tokens
+- `setBalance()` - Configure balance
+- `setTransfersShouldFail()` - Simulate errors
+
+### 🎯 5. **MockAttacker.sol** - Educational Attacker Contract
+
+**⚠️ EDUCATIONAL ONLY - Implements attacks:**
+- 🚨 **Flash Loan Attack** (without fees)
+- 📈 **Price Manipulation Attack**
+- 🥪 **Sandwich Attack**
+- ⚖️ **Rebalance Manipulation**
+
+---
+
+## 🧪 Tests - Complete Coverage
+
+### 📊 **Hardhat Tests** (10 JavaScript tests)
+
+```javascript
+✅ Basic functionalities:
+   - Add liquidity
+   - Swaps with dynamic fees
+   - Automatic rebalancing
+
+✅ Demonstrated vulnerabilities:
+   - Flash loan attack
+   - Price manipulation
+   - Sandwich attack
+
+✅ Protections:
+   - Extreme slippage protection
+   - Emergency mode
+   - MEV protection
+
+✅ Metrics:
+   - Pool metrics analysis
+```
+
+### ⚡ **Foundry Tests** (9 Solidity tests)
+
+```solidity
+✅ Basic tests:
+   - testAddLiquidity()
+   - testSwap()
+   - testCurrentPrice()
+
+✅ Fuzzing tests:
+   - testFuzzAddLiquidity() (10,000 runs)
+   - testFuzzSwap() (10,000 runs)
+
+✅ Protection tests:
+   - testSlippageProtection()
+   - testEmergencyMode()
+
+✅ Invariant tests:
+   - invariant_ConstantProduct()
+```
+
+---
+
+## 🚀 Installation and Setup
 
 ### Prerequisites
 - Node.js >= 18.0.0
 - npm or yarn
-- Foundry (optional, for advanced testing)
+- Git
 
-### Installation Commands
-
+### 1. Clone and install dependencies
 ```bash
-# Navigate to project directory
+git clone <repository-url>
 cd web3-mini-projects/01-defi-liquidity-pool
-
-# Install dependencies
 npm install
-
-# Install Foundry dependencies (if using Foundry)
-forge install
-
-# Compile contracts
-npm run compile
-
-# Run basic tests
-npm test
 ```
 
-### Environment Configuration
-Create a `.env` file:
-```env
-# RPC URLs
-MAINNET_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/your-api-key
-POLYGON_RPC_URL=https://polygon-mainnet.alchemyapi.io/v2/your-api-key
-
-# API Keys
-ETHERSCAN_API_KEY=your-etherscan-api-key
-POLYGONSCAN_API_KEY=your-polygonscan-api-key
-COINMARKETCAP_API_KEY=your-coinmarketcap-api-key
-
-# Testing
-REPORT_GAS=true
-```
-
-## 🧪 Advanced Testing
-
-### Hardhat Tests
+### 2. Install Foundry (optional)
 ```bash
-# Basic tests
-npm test
-
-# Tests with gas report
-npm run test:gas
-
-# Complete coverage
-npm run test:coverage
-
-# Tests on mainnet fork
-npm run deploy:mainnet-fork
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+forge install foundry-rs/forge-std
 ```
-
-### Foundry Tests
-```bash
-# Intensive fuzzing
-npm run test:fuzz
-
-# Invariant testing
-npm run test:invariant
-
-# Tests with different profiles
-forge test --profile dev    # Fast development
-forge test --profile ci     # Complete CI/CD
-```
-
-## 🎥 Demo Scripts for Videos
-
-### 1. Basic Demo - Core Functionalities
-```bash
-npm run demo:setup
-```
-**What it shows:**
-- Create liquidity pool
-- Add liquidity
-- Execute swaps
-- Show dynamic fees
-- Automatic rebalancing
-
-### 2. Vulnerabilities Demo
-```bash
-npm run demo:attack
-```
-**What it shows:**
-- Flash loan without fees
-- Price manipulation
-- Basic front-running
-- Rebalancing exploits
-
-### 3. Protections Demo
-```bash
-npm run demo:protection
-```
-**What it shows:**
-- MEV protection activated
-- Slippage limits
-- Emergency mode
-- Admin controls
-
-## 📊 Analysis and Metrics
-
-### Code Analysis
-```bash
-# Static analysis with Slither
-npm run analyze
-
-# Optimized gas report
-REPORT_GAS=true npm test
-```
-
-### Pool Metrics
-```bash
-# Start local node
-npm run start:node
-
-# In another terminal, execute metrics
-node scripts/metrics.js
-```
-
-## 🔍 Use Cases for Videos
-
-### Video 1: "Creating a Professional DeFi Pool"
-- Show contract architecture
-- Explain AMM mathematics
-- Demonstrate advanced features
-- **Duration**: 15-20 minutes
-
-### Video 2: "Advanced Testing with Fuzzing"
-- Configure fuzzing with Foundry
-- Find bugs with property testing
-- Invariant analysis
-- **Duration**: 12-15 minutes
-
-### Video 3: "DeFi Vulnerabilities and Attacks"
-- Demonstrate flash loan attacks
-- Show price manipulation
-- Implement protections
-- **Duration**: 18-22 minutes
-
-### Video 4: "Gas Optimization and Performance"
-- Gas analysis with Hardhat
-- Storage optimizations
-- Benchmarking with Foundry
-- **Duration**: 10-12 minutes
-
-## 🚨 Educational Vulnerabilities
-
-### 1. Flash Loan Without Fees
-**Location**: `flashLoan()` function
-**Problem**: Doesn't charge fees for instant loans
-**Exploitation**: Free arbitrage
-
-### 2. Manipulable Rebalancing
-**Location**: `_executeRebalance()` function
-**Problem**: Simplified rebalancing logic
-**Exploitation**: Price manipulation
-
-### 3. Oracle Price Dependency
-**Location**: `updateOraclePrice()` function
-**Problem**: Depends on single oracle
-**Exploitation**: Price manipulation
-
-## 🏗️ Project Architecture
-
-```
-contracts/
-├── DeFiLiquidityPool.sol      # Main contract
-├── interfaces/
-│   └── ILiquidityPool.sol     # Main interface
-├── libraries/
-│   └── LiquidityMath.sol      # Mathematical library
-├── mocks/
-│   ├── MockERC20.sol          # Test token
-│   └── MockAttacker.sol       # Attacker for demos
-└── test/
-    ├── unit/                  # Unit tests
-    ├── integration/           # Integration tests
-    ├── fuzz/                  # Fuzzing tests
-    └── invariant/             # Invariant tests
-```
-
-## 📋 File-by-File Explanation
-
-### Core Contracts
-
-#### `DeFiLiquidityPool.sol` (Main Contract)
-**Purpose**: Core liquidity pool with advanced features
-**Key Features**:
-- Automatic rebalancing based on price ratios
-- Dynamic fees that adjust with volatility
-- MEV protection through block-based delays
-- Flash loans with controlled vulnerabilities
-- Emergency controls and pausable functionality
-
-**Why Important**: Demonstrates production-quality DeFi contract architecture with real-world features and controlled vulnerabilities for educational purposes.
-
-#### `ILiquidityPool.sol` (Interface)
-**Purpose**: Standard interface for the liquidity pool
-**Key Features**:
-- Complete function signatures
-- Event definitions
-- Documentation for all public functions
-
-**Why Important**: Following interface standards is crucial for DeFi interoperability and testing.
-
-#### `LiquidityMath.sol` (Library)
-**Purpose**: Mathematical calculations for AMM operations
-**Key Features**:
-- AMM formula implementations (x * y = k)
-- Price impact calculations
-- Slippage calculations
-- Impermanent loss calculations
-- Square root function (Babylonian method)
-
-**Why Important**: Shows advanced mathematical concepts in DeFi and gas-efficient implementations.
-
-### Testing Infrastructure
-
-#### `MockERC20.sol` (Test Token)
-**Purpose**: ERC20 token for testing with additional features
-**Key Features**:
-- Mintable tokens for test scenarios
-- Configurable decimals
-- Ability to simulate transfer failures
-- Balance manipulation for testing
-
-**Why Important**: Essential for comprehensive testing scenarios and edge cases.
-
-#### `MockAttacker.sol` (Educational Attacker)
-**Purpose**: Demonstrates common DeFi attack vectors
-**Key Features**:
-- Flash loan attacks
-- Price manipulation
-- Sandwich attacks
-- Rebalance exploitation
-
-**Why Important**: Educational tool to understand DeFi security vulnerabilities.
-
-#### `DeFiLiquidityPool.basic.test.js` (Test Suite)
-**Purpose**: Comprehensive test suite
-**Key Features**:
-- Basic functionality tests
-- Attack simulations
-- Protection verifications
-- Metrics and analytics
-
-**Why Important**: Demonstrates professional testing practices in DeFi.
-
-### Configuration Files
-
-#### `package.json`
-**Purpose**: Project configuration and dependencies
-**Key Features**:
-- All necessary Hardhat dependencies
-- Testing scripts
-- Demo scripts
-- Gas reporting tools
-
-#### `hardhat.config.js`
-**Purpose**: Hardhat configuration
-**Key Features**:
-- Network configurations
-- Forking setup
-- Gas reporting
-- Optimization settings
-
-#### `foundry.toml`
-**Purpose**: Foundry configuration
-**Key Features**:
-- Fuzzing configurations
-- Invariant testing setup
-- Different testing profiles
-- Gas optimization
-
-### Demo Scripts
-
-#### `demo-setup.js`
-**Purpose**: Setup script for video demonstrations
-**Key Features**:
-- Automated contract deployment
-- Token distribution
-- Initial pool configuration
-- Demo instructions
-
-**Why Important**: Streamlines the process of creating educational content.
-
-## 🎛️ Advanced Configuration
-
-### Hardhat Custom Tasks
-```bash
-# Deploy with custom configuration
-npx hardhat deploy --network localhost --fee-rate 50
-
-# Simulate attacks
-npx hardhat attack --type flashloan --amount 1000
-```
-
-### Foundry Profiles
-```toml
-[profile.dev]
-fuzz = { runs = 1000 }
-invariant = { runs = 100 }
-
-[profile.ci]
-fuzz = { runs = 10000 }
-invariant = { runs = 1000 }
-```
-
-## 📈 Performance Metrics
-
-### Gas Consumption
-- **Add Liquidity**: ~95,000 gas
-- **Remove Liquidity**: ~75,000 gas
-- **Swap**: ~65,000 gas
-- **Flash Loan**: ~45,000 gas
-
-### Test Coverage
-- **Statements**: 95%+
-- **Branches**: 90%+
-- **Functions**: 100%
-- **Lines**: 95%+
-
-## 🔗 Additional Resources
-
-### Documentation
-- [Hardhat Documentation](https://hardhat.org/docs)
-- [Foundry Book](https://book.getfoundry.sh/)
-- [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts)
-
-### Tools Used
-- **Hardhat**: Development framework
-- **Foundry**: Advanced testing and fuzzing
-- **Slither**: Static analysis
-- **Solhint**: Solidity linting
-- **Hardhat Gas Reporter**: Gas analysis
-
-## 🤝 Contributions
-
-This project is designed to be educational. If you find real bugs or improvements, contributions are welcome.
-
-## ⚠️ Disclaimer
-
-This code is **FOR EDUCATIONAL PURPOSES ONLY**. It contains intentional vulnerabilities to demonstrate security concepts. **DO NOT use in production**.
 
 ---
 
-**Perfect for creating educational content about DeFi, Advanced Testing, and Web3 Security!** 🚀
+## 🎮 Available Commands
 
-## 📋 Quick Start Checklist
+### 🔧 **Hardhat Commands**
 
-1. ✅ **Install dependencies**: `npm install`
-2. ✅ **Compile contracts**: `npm run compile`
-3. ✅ **Run tests**: `npm test`
-4. ✅ **Setup demo**: `npm run demo:setup`
-5. ✅ **Create first video**: Start with basic functionalities
-6. ✅ **Analyze with Slither**: `npm run analyze`
-7. ✅ **Test with fuzzing**: `npm run test:fuzz` 
+```bash
+# Testing
+npm run test              # Run all tests (10 tests)
+npm run test:gas          # Tests with gas reporting
+npm run test:coverage     # Tests with code coverage
+
+# Compilation
+npm run compile           # Compile contracts
+
+# Deployment
+npm run deploy:local      # Deploy to local network
+npm run deploy:mainnet-fork # Deploy to mainnet fork
+npm run start:node        # Start local node
+
+# Demos
+npm run demo:setup        # Setup demo
+npm run demo:basic        # Basic demo
+npm run demo:attack       # Attack demo
+npm run demo:protection   # Protection demo
+
+# Analysis
+npm run analyze           # Static analysis with Slither
+```
+
+### ⚡ **Foundry Commands**
+
+```bash
+# Testing
+npm run test:fuzz         # Fuzzing tests (10,000 runs)
+npm run test:invariant    # Invariant tests
+forge test                # Run all tests
+forge test -vv            # Tests with verbosity
+forge test --match-test testSwap # Specific test
+
+# Compilation
+forge build               # Compile contracts
+forge clean               # Clean artifacts
+
+# Analysis
+forge coverage            # Coverage report
+forge fmt                 # Format code
+forge snapshot            # Gas snapshot
+```
+
+---
+
+## 🎬 Video Demo Guide
+
+### 🎯 **1. Introduction (2-3 min)**
+```
+"Complete DeFi project including:
+- ✅ Liquidity Pool with AMM
+- ✅ Exhaustive tests (Hardhat + Foundry)
+- ✅ Educational vulnerabilities
+- ✅ Advanced MEV protections"
+```
+
+### 🏗️ **2. Architecture (3-4 min)**
+```bash
+# Show structure
+tree contracts/
+ls -la test/
+
+# Show lines of code
+wc -l contracts/*.sol
+```
+
+### 💻 **3. Practical Demonstration (8-10 min)**
+```bash
+# Hardhat tests
+npm run test              # 10 passing tests
+npm run test:gas          # Gas reports
+
+# Foundry tests
+forge test -vv            # 9 passing tests
+npm run test:fuzz         # Advanced fuzzing
+
+# Coverage
+npm run test:coverage     # Complete analysis
+```
+
+### 🚨 **4. Educational Vulnerabilities (3-4 min)**
+```
+Explain each attack:
+- 🔓 Flash loans without fees
+- 📈 Price manipulation
+- 🥪 Sandwich attacks
+- ⚖️ Rebalance manipulation
+```
+
+### 🛡️ **5. Protections (2-3 min)**
+```
+Show implemented protections:
+- 🔒 MEV protection
+- 📊 Slippage limits
+- 🚨 Emergency mode
+- ⚖️ Automatic rebalancing
+```
+
+### 🎯 **6. Conclusions (1-2 min)**
+```
+"Complete demonstration of:
+- ✅ Professional DeFi development
+- ✅ Exhaustive testing
+- ✅ Security considerations"
+```
+
+---
+
+## 📊 Project Metrics
+
+| Metric | Value |
+|---------|-------|
+| **Solidity Contracts** | 5 files |
+| **Lines of code** | ~1,100 lines |
+| **Total tests** | 19 tests |
+| **Hardhat tests** | 10 JavaScript tests |
+| **Foundry tests** | 9 Solidity tests |
+| **Fuzzing runs** | 10,000 per test |
+| **Coverage** | High coverage |
+| **Frameworks** | Hardhat + Foundry |
+
+---
+
+## 🔒 Educational Vulnerabilities
+
+### ⚠️ **IMPORTANT WARNING**
+The following vulnerabilities are implemented **FOR EDUCATIONAL PURPOSES ONLY**:
+
+1. **Flash Loan without fees** - Allows free loans
+2. **Price manipulation** - Pool price manipulation
+3. **Sandwich attacks** - Transaction front-running
+4. **Rebalance manipulation** - Rebalancing exploitation
+
+### 🛡️ **Implemented Protections**
+
+1. **MEV Protection** - Blocks between transactions
+2. **Slippage Protection** - Price impact limits
+3. **Emergency Mode** - Pause operations in emergency
+4. **Automatic Rebalancing** - Maintain pool balance
+
+---
+
+## 🤝 Contributions
+
+This project is educational. Contributions are welcome for:
+- 📖 Improving documentation
+- 🧪 Adding more tests
+- 🔒 Implementing more protections
+- 📚 Adding more educational vulnerabilities
+
+---
+
+## 📜 License
+
+This project is under MIT license. See LICENSE for more details.
+
+---
+
+## 📞 Contact
+
+For questions about this educational project:
+- 📧 Email: your-email@example.com
+- 💬 GitHub: @your-username
+- 🐦 Twitter: @your-username
+
+---
+
+## 🙏 Acknowledgments
+
+- OpenZeppelin for base contracts
+- Hardhat for development framework
+- Foundry for testing tools
+- DeFi community for education and best practices
+
+---
+
+**⚠️ REMINDER:** This project is educational only. Vulnerabilities are included to demonstrate security concepts. **DO NOT use in production without appropriate fixes.** 
