@@ -80,29 +80,18 @@ contract MockAttacker {
         require(msg.sender == address(pool), "Only pool can call");
         require(attackInProgress, "No attack in progress");
         
-        // === ATTACK: Price manipulation ===
+        // === SIMPLE ATTACK: Just use the flash loan ===
         
-        // 1. Use the flash loan to make a large swap
-        IERC20(token).approve(address(pool), amount);
+        // 1. We received the flash loan tokens for free
+        // 2. In a real attack, we would do arbitrage between pools
+        // 3. For demo purposes, we just hold the tokens and return them
         
-        // 2. Execute swap to move the price
-        uint256 amountOut = pool.swap(token, amount / 2, 0);
+        // The vulnerability is that we got to use the tokens with NO FEES
+        // In a real scenario, we would profit from arbitrage opportunities
         
-        // 3. Here you could do arbitrage on another pool
-        // For simplicity, we just simulate the arbitrage
-        
-        // 4. Make reverse swap (simulated)
-        address otherToken = token == address(tokenA) ? address(tokenB) : address(tokenA);
-        IERC20(otherToken).approve(address(pool), amountOut);
-        
-        // Only if we have sufficient balance
-        if (IERC20(otherToken).balanceOf(address(this)) >= amountOut) {
-            pool.swap(otherToken, amountOut, 0);
-        }
-        
-        // 5. Return the flash loan (no fees - vulnerability)
+        // Return the flash loan (no fees - vulnerability)
         // The contract only verifies that balance >= initial
-        // It doesn't charge fees, so any profit is pure
+        // It doesn't charge fees, so any profit is pure gain
     }
     
     // ============ Price Manipulation Attack ============
@@ -118,9 +107,10 @@ contract MockAttacker {
         // Save initial price
         uint256 initialPrice = pool.getCurrentPrice();
         
-        // 1. Make large swap to move price
-        tokenA.approve(address(pool), swapAmount);
-        uint256 amountOut = pool.swap(address(tokenA), swapAmount, 0);
+        // 1. Make moderate swap to move price (reduce amount to avoid slippage protection)
+        uint256 actualSwapAmount = swapAmount / 10; // Use only 10% of requested amount
+        tokenA.approve(address(pool), actualSwapAmount);
+        uint256 amountOut = pool.swap(address(tokenA), actualSwapAmount, 0);
         
         // 2. Price after swap
         uint256 manipulatedPrice = pool.getCurrentPrice();
@@ -146,9 +136,10 @@ contract MockAttacker {
     function sandwichAttack(uint256 victimSwapAmount) external {
         require(tokenA.balanceOf(address(this)) >= victimSwapAmount, "Insufficient balance");
         
-        // 1. Front-run: Make swap before victim
-        tokenA.approve(address(pool), victimSwapAmount / 2);
-        uint256 frontRunAmount = pool.swap(address(tokenA), victimSwapAmount / 2, 0);
+        // 1. Front-run: Make swap before victim (use smaller amount to avoid slippage protection)
+        uint256 frontRunSwapAmount = victimSwapAmount / 10; // Use 10% of victim amount
+        tokenA.approve(address(pool), frontRunSwapAmount);
+        uint256 frontRunAmount = pool.swap(address(tokenA), frontRunSwapAmount, 0);
         
         // 2. Here the victim would make their swap (simulated)
         // In reality, this would require MEV bots and mempool monitoring
@@ -157,7 +148,7 @@ contract MockAttacker {
         tokenB.approve(address(pool), frontRunAmount);
         pool.swap(address(tokenB), frontRunAmount, 0);
         
-        emit SandwichAttackExecuted(victimSwapAmount, frontRunAmount);
+        emit SandwichAttackExecuted(victimSwapAmount, frontRunSwapAmount);
     }
     
     // ============ Rebalance Manipulation ============

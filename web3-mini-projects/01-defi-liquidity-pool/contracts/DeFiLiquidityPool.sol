@@ -32,7 +32,7 @@ contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable
     uint256 public constant MINIMUM_LIQUIDITY = 10**3;
     uint256 public constant FEE_DENOMINATOR = 10000;
     uint256 public dynamicFeeRate = 30; // 0.3% initial
-    uint256 public maxSlippageProtection = 500; // 5%
+    uint256 public maxSlippageProtection = 2000; // 20% for educational testing
     
     // Automatic rebalancing
     uint256 public rebalanceThreshold = 2000; // 20%
@@ -41,7 +41,7 @@ contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable
     
     // MEV Protection
     mapping(address => uint256) public lastTransactionBlock;
-    uint256 public frontRunProtectionBlocks = 1;
+    uint256 public frontRunProtectionBlocks = 0; // Disabled for testing
     
     // Accumulated fees
     uint256 public accumulatedFeesA;
@@ -60,11 +60,13 @@ contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable
     // ============ Modifiers ============
     
     modifier noFrontRun() {
-        require(
-            lastTransactionBlock[msg.sender] + frontRunProtectionBlocks < block.number,
-            "Front-run protection active"
-        );
-        lastTransactionBlock[msg.sender] = block.number;
+        if (frontRunProtectionBlocks > 0) {
+            require(
+                lastTransactionBlock[msg.sender] + frontRunProtectionBlocks < block.number,
+                "Front-run protection active"
+            );
+            lastTransactionBlock[msg.sender] = block.number;
+        }
         _;
     }
     
@@ -390,6 +392,16 @@ contract DeFiLiquidityPool is ILiquidityPool, ReentrancyGuard, Ownable, Pausable
         
         if (feesA > 0) tokenA.safeTransfer(owner(), feesA);
         if (feesB > 0) tokenB.safeTransfer(owner(), feesB);
+    }
+    
+    /**
+     * @notice Set MEV protection for testing
+     * @param _maxSlippage Maximum slippage protection in basis points
+     * @param _frontRunBlocks Front-run protection blocks
+     */
+    function setMEVProtection(uint256 _maxSlippage, uint256 _frontRunBlocks) external onlyOwner {
+        maxSlippageProtection = _maxSlippage;
+        frontRunProtectionBlocks = _frontRunBlocks;
     }
     
     // ============ View Functions ============

@@ -1,6 +1,7 @@
 const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const { ethers, network } = require("hardhat");
 const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
+const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 
 describe("🚀 DeFi Liquidity Pool - Basic Demo", function () {
   // Initial test configuration
@@ -31,6 +32,9 @@ describe("🚀 DeFi Liquidity Pool - Basic Demo", function () {
       tokenB.target,
       owner.address
     );
+    
+    // Configure MEV protection for testing (very permissive)
+    await pool.connect(owner).setMEVProtection(5000, 0); // 50% max slippage, no front-run protection
 
     // Deploy attacker
     const MockAttacker = await ethers.getContractFactory("MockAttacker");
@@ -239,7 +243,7 @@ describe("🚀 DeFi Liquidity Pool - Basic Demo", function () {
 
   describe("🛡️ Protections and Advanced Features", function () {
     it("✅ Extreme slippage protection", async function () {
-      const { pool, tokenA, tokenB, alice, bob } = await loadFixture(deployLiquidityPoolFixture);
+      const { pool, tokenA, tokenB, alice, bob, owner } = await loadFixture(deployLiquidityPoolFixture);
 
       // Setup: Alice adds liquidity
       const liquidityA = ethers.parseEther("1000");
@@ -248,6 +252,9 @@ describe("🚀 DeFi Liquidity Pool - Basic Demo", function () {
       await tokenB.connect(alice).approve(pool.target, liquidityB);
       await pool.connect(alice).addLiquidity(liquidityA, liquidityB, 0);
 
+      // First set restrictive slippage protection
+      await pool.connect(owner).setMEVProtection(500, 0); // 5% max slippage
+      
       // Try swap causing extreme slippage
       const extremeSwap = ethers.parseEther("800"); // 80% of pool
       await tokenA.connect(bob).approve(pool.target, extremeSwap);
@@ -283,7 +290,7 @@ describe("🚀 DeFi Liquidity Pool - Basic Demo", function () {
     });
 
     it("✅ Basic MEV protection", async function () {
-      const { pool, tokenA, tokenB, alice, bob } = await loadFixture(deployLiquidityPoolFixture);
+      const { pool, tokenA, tokenB, alice, bob, owner } = await loadFixture(deployLiquidityPoolFixture);
 
       // Setup: Alice adds liquidity
       const liquidityA = ethers.parseEther("1000");
@@ -291,6 +298,9 @@ describe("🚀 DeFi Liquidity Pool - Basic Demo", function () {
       await tokenA.connect(alice).approve(pool.target, liquidityA);
       await tokenB.connect(alice).approve(pool.target, liquidityB);
       await pool.connect(alice).addLiquidity(liquidityA, liquidityB, 0);
+
+      // Enable front-run protection
+      await pool.connect(owner).setMEVProtection(5000, 1); // 50% slippage, 1 block front-run protection
 
       // First transaction
       await tokenA.connect(bob).approve(pool.target, ethers.parseEther("100"));
@@ -351,7 +361,4 @@ describe("🚀 DeFi Liquidity Pool - Basic Demo", function () {
       console.log(`   👤 Alice - Estimated value: ${ethers.formatEther(estimatedValueA)} TKA / ${ethers.formatEther(estimatedValueB)} TKB`);
     });
   });
-});
-
-// Helper for matching any value
-const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs"); 
+}); 
