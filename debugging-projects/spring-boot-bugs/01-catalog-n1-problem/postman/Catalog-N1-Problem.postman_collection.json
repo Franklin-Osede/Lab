@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "catalog-n1-problem-demo",
+		"name": "Catalog N+1 Problem Demo",
+		"description": "Colección de Postman para demostrar el problema N+1 y su solución en Spring Boot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "🏥 Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/products/health",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"products",
+						"health"
+					]
+				},
+				"description": "Verificar el estado de la aplicación y obtener información sobre los endpoints disponibles"
+			},
+			"response": []
+		},
+		{
+			"name": "📊 Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/products/metrics",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"products",
+						"metrics"
+					]
+				},
+				"description": "Obtener información sobre las métricas disponibles en la aplicación"
+			},
+			"response": []
+		},
+		{
+			"name": "🐛 N+1 Bug Demo (Lento)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/products/with-n1-bug",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"products",
+						"with-n1-bug"
+					]
+				},
+				"description": "❌ ENDPOINT CON BUG N+1\n\nEste endpoint demuestra el problema N+1:\n- 1 query para obtener productos\n- N queries adicionales para obtener reseñas\n- Total: 1 + N = N+1 queries\n\nCon 30 productos: 31 queries totales\n\n⚠️ Este endpoint será LENTO debido al problema N+1"
+			},
+			"response": []
+		},
+		{
+			"name": "✅ Optimized Demo (Rápido)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/products/optimized",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"products",
+						"optimized"
+					]
+				},
+				"description": "✅ ENDPOINT OPTIMIZADO\n\nEste endpoint usa la solución optimizada:\n- 1 query con JOIN FETCH\n- Carga productos y reseñas en una sola consulta\n- Total: 1 query optimizada\n\nCon 30 productos: 1 query total\n\n🚀 Este endpoint será RÁPIDO"
+			},
+			"response": []
+		},
+		{
+			"name": "📈 Performance Comparison",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/products/performance-comparison",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"products",
+						"performance-comparison"
+					]
+				},
+				"description": "📊 COMPARACIÓN DE PERFORMANCE\n\nEste endpoint ejecuta ambas implementaciones y compara:\n- Tiempo de ejecución N+1 vs Optimizado\n- Número de productos procesados\n- Porcentaje de mejora\n\nÚtil para demostrar la diferencia de performance"
+			},
+			"response": []
+		},
+		{
+			"name": "🔍 Actuator Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/../actuator/health",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"..",
+						"actuator",
+						"health"
+					]
+				},
+				"description": "Verificar el estado de salud de la aplicación a través de Spring Boot Actuator"
+			},
+			"response": []
+		},
+		{
+			"name": "📊 Actuator Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/../actuator/metrics",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"..",
+						"actuator",
+						"metrics"
+					]
+				},
+				"description": "Obtener todas las métricas disponibles en la aplicación"
+			},
+			"response": []
+		},
+		{
+			"name": "📈 Specific Metric - N+1 Timer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/../actuator/metrics/catalog.list.products.with.n1.bug",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"..",
+						"actuator",
+						"metrics",
+						"catalog.list.products.with.n1.bug"
+					]
+				},
+				"description": "Obtener métricas específicas del timer para la implementación N+1"
+			},
+			"response": []
+		},
+		{
+			"name": "📈 Specific Metric - Optimized Timer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/../actuator/metrics/catalog.list.products.optimized",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"..",
+						"actuator",
+						"metrics",
+						"catalog.list.products.optimized"
+					]
+				},
+				"description": "Obtener métricas específicas del timer para la implementación optimizada"
+			},
+			"response": []
+		},
+		{
+			"name": "🔄 Test Suite - Performance Demo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/products/performance-comparison",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"products",
+						"performance-comparison"
+					]
+				},
+				"description": "🔄 SUITE DE PRUEBAS - DEMO DE PERFORMANCE\n\nEjecuta esta request varias veces para:\n1. Calentar la JVM\n2. Obtener métricas consistentes\n3. Demostrar la diferencia de performance\n\nIdeal para mostrar en videos de debugging"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Log request start time for performance tracking",
+					"pm.globals.set('requestStartTime', Date.now());",
+					"",
+					"// Log which endpoint is being called",
+					"console.log('🚀 Calling: ' + pm.request.url.toString());"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Calculate response time",
+					"const requestStartTime = pm.globals.get('requestStartTime');",
+					"const responseTime = Date.now() - requestStartTime;",
+					"",
+					"// Log performance metrics",
+					"console.log('⏱️ Response time: ' + responseTime + 'ms');",
+					"",
+					"// Store response time for comparison",
+					"pm.globals.set('lastResponseTime', responseTime);",
+					"",
+					"// Basic response validation",
+					"pm.test('Status code is 200', function () {",
+					"    pm.response.to.have.status(200);",
+					"});",
+					"",
+					"pm.test('Response time is reasonable', function () {",
+					"    pm.expect(responseTime).to.be.below(10000); // 10 seconds max",
+					"});",
+					"",
+					"// Specific tests for performance comparison",
+					"if (pm.request.url.path.includes('performance-comparison')) {",
+					"    pm.test('Performance comparison has required fields', function () {",
+					"        const jsonData = pm.response.json();",
+					"        pm.expect(jsonData).to.have.property('n1ExecutionTime');",
+					"        pm.expect(jsonData).to.have.property('optimizedExecutionTime');",
+					"        pm.expect(jsonData).to.have.property('performanceImprovement');",
+					"    });",
+					"    ",
+					"    pm.test('Optimized is faster than N+1', function () {",
+					"        const jsonData = pm.response.json();",
+					"        pm.expect(jsonData.optimizedExecutionTime).to.be.lessThan(jsonData.n1ExecutionTime);",
+					"    });",
+					"}",
+					"",
+					"// Tests for product endpoints",
+					"if (pm.request.url.path.includes('products') && !pm.request.url.path.includes('health') && !pm.request.url.path.includes('metrics')) {",
+					"    pm.test('Products endpoint returns array', function () {",
+					"        const jsonData = pm.response.json();",
+					"        pm.expect(jsonData).to.be.an('array');",
+					"    });",
+					"    ",
+					"    pm.test('Products have required fields', function () {",
+					"        const jsonData = pm.response.json();",
+					"        if (jsonData.length > 0) {",
+					"            const product = jsonData[0];",
+					"            pm.expect(product).to.have.property('id');",
+					"            pm.expect(product).to.have.property('name');",
+					"            pm.expect(product).to.have.property('price');",
+					"            pm.expect(product).to.have.property('averageRating');",
+					"            pm.expect(product).to.have.property('reviewCount');",
+					"        }",
+					"    });",
+					"}",
+					"",
+					"// Log success",
+					"console.log('✅ Request completed successfully');"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api/v1",
+			"type": "string",
+			"description": "URL base de la aplicación Spring Boot"
+		}
+	]
+}

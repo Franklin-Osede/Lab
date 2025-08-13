@@ -1,212 +1,250 @@
-# 🐛 Spring Boot Debugging Projects - Plan Maestro
+# 🐛 Catálogo N+1 Problem - Spring Boot Demo
 
-## 🎯 Objetivo General
+## 🎯 Objetivo
 
-Demostrar dominio experto en debugging, testing y arquitectura de software a través de 5 proyectos Spring Boot con bugs intencionales que se resuelven aplicando DDD, TDD y BDD.
+Demostrar el problema clásico de **N+1 queries** en Spring Boot y cómo solucionarlo aplicando **Domain-Driven Design (DDD)** y optimizaciones de JPA.
 
-## 📋 Proyectos Planificados
+## 🐛 El Problema N+1
 
-### 1. 🛍️ **Catálogo N+1 Problem** (`01-catalog-n1-problem`)
-**Problema**: Consultas ineficientes que generan N+1 queries
-**Bug Intencional**: Cada producto dispara consulta adicional por reseñas
-**Solución DDD**: EntityGraph, DTOs optimizados, carga eager controlada
-**Tiempo**: 2-3 horas
+### ¿Qué es?
+- **1 query** para obtener productos
+- **N queries** adicionales para obtener reseñas de cada producto
+- **Total**: 1 + N = N+1 queries
 
-### 2. 📅 **Reservas con Validación** (`02-booking-validation`)
-**Problema**: Validación inconsistente de fechas y errores no estandarizados
-**Bug Intencional**: Permite reservas con fecha fin < fecha inicio
-**Solución DDD**: Bean Validation, manejo global de errores, DateRange VO
-**Tiempo**: 2 horas
+### Ejemplo con 30 productos:
+- ❌ **N+1**: 1 query + 30 queries = **31 queries**
+- ✅ **Optimizado**: 1 query con JOIN FETCH = **1 query**
 
-### 3. 🔐 **Login con Performance** (`03-login-performance`)
-**Problema**: Autenticación lenta sin caché ni optimizaciones
-**Bug Intencional**: Consulta secuencial de usuarios sin índices
-**Solución DDD**: Redis cache, consultas optimizadas, métricas
-**Tiempo**: 2 horas
-
-### 4. 💳 **Pagos con Resiliencia** (`04-payment-resilience`)
-**Problema**: Sin manejo de timeouts, reintentos ni circuit breaker
-**Bug Intencional**: Llamadas externas sin control de errores
-**Solución DDD**: Resilience4j, retry policies, external service adapter
-**Tiempo**: 2-3 horas
-
-### 5. 📦 **Inventario con Concurrencia** (`05-inventory-concurrency`)
-**Problema**: Race conditions en stock sin control de concurrencia
-**Bug Intencional**: Múltiples reservas simultáneas generan stock negativo
-**Solución DDD**: Optimistic locking, versioning, aggregate boundaries
-**Tiempo**: 3 horas
-
-## 🏗️ Arquitectura DDD Consistente
-
-Cada proyecto sigue la misma estructura:
+## 🏗️ Arquitectura DDD
 
 ```
-src/main/java/com/debugging/{project}/
+src/main/java/com/debugging/catalog/
 ├── domain/                    # 🎯 Capa de Dominio
-│   ├── model/                 # Entidades, Value Objects, Aggregates
-│   ├── repository/            # Interfaces de repositorio
-│   └── service/               # Servicios de dominio
+│   ├── model/                 # Entidades y Value Objects
+│   │   ├── Product.java       # Aggregate Root
+│   │   └── Review.java        # Entidad del Aggregate
+│   └── repository/            # Interfaces de repositorio
+│       ├── ProductRepository.java
+│       └── ReviewRepository.java
 ├── application/               # 🚀 Capa de Aplicación
-│   ├── usecase/               # Casos de uso (orquestadores)
+│   ├── usecase/               # Casos de uso
+│   │   └── ListProductsUseCase.java
 │   └── dto/                   # Data Transfer Objects
+│       ├── ProductDTO.java
+│       └── ReviewDTO.java
 └── infrastructure/            # 🔧 Capa de Infraestructura
     ├── repository/            # Implementaciones JPA
-    ├── rest/                  # Controllers REST
-    └── config/                # Configuraciones
+    │   ├── JpaProductRepository.java
+    │   └── JpaReviewRepository.java
+    └── rest/                  # Controllers REST
+        └── ProductController.java
 ```
 
-## 🧪 Testing Strategy
+## 🚀 Cómo Ejecutar
 
-### BDD (Behavior Driven Development)
-- **Cucumber** con archivos `.feature`
-- Escenarios en lenguaje natural
-- Step definitions que llaman a endpoints reales
-
-### TDD (Test Driven Development)
-- **JUnit 5** con Mockito
-- Tests unitarios para cada capa
-- Tests de integración con `@SpringBootTest`
-
-### Testing Pyramid
-```
-    /\
-   /  \     E2E Tests (Cucumber)
-  /____\    
- /      \   Integration Tests
-/________\  Unit Tests
+### 1. Clonar y configurar
+```bash
+cd debugging-projects/spring-boot-bugs/01-catalog-n1-problem
+./mvnw spring-boot:run
 ```
 
-## 🛠️ Herramientas de Debugging VS Code
+### 2. Acceder a la aplicación
+- **Aplicación**: http://localhost:8080/api/v1
+- **H2 Console**: http://localhost:8080/h2-console
+- **Actuator**: http://localhost:8080/actuator
 
-### 1. Breakpoints Avanzados
+## 📊 Endpoints Disponibles
+
+### ❌ Endpoint con Bug N+1
+```bash
+GET /api/v1/products/with-n1-bug
+```
+**Comportamiento**: Lento, genera N+1 queries
+
+### ✅ Endpoint Optimizado
+```bash
+GET /api/v1/products/optimized
+```
+**Comportamiento**: Rápido, 1 query optimizada
+
+### 📈 Comparación de Performance
+```bash
+GET /api/v1/products/performance-comparison
+```
+**Resultado**: Métricas comparativas
+
+### 🏥 Health Check
+```bash
+GET /api/v1/products/health
+```
+**Resultado**: Estado de la aplicación
+
+## 🛠️ Debugging en VS Code
+
+### 1. Breakpoints Condicionales
 ```java
-// Breakpoint condicional
-if (products.size() > 10) {
-    // Solo se activa con más de 10 productos
+// En ListProductsUseCase.java línea 58
+if (products.size() > 5) {
+    // Breakpoint aquí para productos con muchas reseñas
 }
-
-// Breakpoint con expresión
-product.getReviews().size() > 5
 ```
 
-### 2. Logpoints (Sin Pausar)
+### 2. Logpoints para Métricas
 ```java
-// Log automático de métricas
-logger.info("Query count: {}, Time: {}ms", queryCount, executionTime);
+// En ProductController.java línea 45
+logger.info("🐛 N+1 buggy endpoint completed in {}ms for {} products", 
+           executionTime, products.size());
 ```
 
 ### 3. Watch Expressions
-- `System.currentTimeMillis() - startTime` - Tiempo de ejecución
-- `products.stream().count()` - Cantidad de productos
-- `queryCount` - Contador de consultas SQL
+- `products.size()` - Cantidad de productos
+- `executionTime` - Tiempo de ejecución
+- `System.currentTimeMillis() - startTime` - Tiempo transcurrido
 
 ### 4. Debug Console
 ```java
 // Comandos útiles durante debugging
+products.stream().count()
 products.stream().mapToInt(p -> p.getReviews().size()).sum()
 System.currentTimeMillis()
-Thread.currentThread().getName()
+```
+
+## 🧪 Testing
+
+### Tests Unitarios
+```bash
+./mvnw test
+```
+
+### Tests BDD (Cucumber)
+```bash
+./mvnw test -Dtest=CucumberTest
+```
+
+### Tests de Integración
+```bash
+./mvnw verify
 ```
 
 ## 📊 Métricas y Observabilidad
 
-### Spring Boot Actuator
-- `/actuator/health` - Estado de la aplicación
-- `/actuator/metrics` - Métricas de performance
-- `/actuator/prometheus` - Métricas para Prometheus
+### Actuator Endpoints
+- **Health**: `/actuator/health`
+- **Metrics**: `/actuator/metrics`
+- **Prometheus**: `/actuator/prometheus`
 
-### Micrometer
-```java
-@Timed("catalog.list.products")
-@Counted("catalog.list.products.count")
-public List<ProductDTO> listProducts() {
-    // Métricas automáticas
-}
+### Métricas Personalizadas
+- `catalog.list.products.with.n1.bug` - Timer para implementación N+1
+- `catalog.list.products.optimized` - Timer para implementación optimizada
+- `catalog.products.controller` - Timer para operaciones del controller
+
+## 🔍 Cómo Reproducir el Problema
+
+### 1. Ejecutar endpoint N+1
+```bash
+curl http://localhost:8080/api/v1/products/with-n1-bug
 ```
 
-### Logging Estrcuturado
-```java
-logger.info("Processing {} products", products.size(), 
-    Map.of("queryCount", queryCount, "executionTime", executionTime));
+### 2. Observar logs SQL
+```
+Hibernate: select product0_.id as id1_0_, product0_.category as category2_0_, ...
+Hibernate: select reviews0_.product_id as product_3_1_, reviews0_.id as id1_1_, ...
+Hibernate: select reviews0_.product_id as product_3_1_, reviews0_.id as id1_1_, ...
+Hibernate: select reviews0_.product_id as product_3_1_, reviews0_.id as id1_1_, ...
+... (repetido N veces)
 ```
 
-## 🎬 Flujo de Demostración Estándar
+### 3. Ejecutar endpoint optimizado
+```bash
+curl http://localhost:8080/api/v1/products/optimized
+```
 
-### 1. **Presentación del Problema** (30s)
-- Contexto de negocio
-- Comportamiento esperado vs actual
-- Impacto en el usuario
+### 4. Observar una sola query
+```
+Hibernate: select distinct product0_.id as id1_0_, product0_.category as category2_0_, ...
+```
 
-### 2. **Test-Driven Development** (1min)
-- Escribir feature BDD
-- Implementar test que falla
-- Mostrar "test rojo"
+## 🎯 Solución Implementada
 
-### 3. **Debugging en Vivo** (2-3min)
-- Breakpoints condicionales
-- Logpoints y métricas
-- Análisis de performance
-- Identificación del root cause
+### ❌ Código Problemático
+```java
+// N+1 queries
+List<Product> products = productRepository.findAll(); // 1 query
+return products.stream()
+    .map(product -> {
+        List<Review> reviews = reviewRepository.findByProductId(product.getId()); // N queries
+        return ProductDTO.from(product, reviews);
+    })
+    .collect(Collectors.toList());
+```
 
-### 4. **Solución con DDD** (2-3min)
-- Refactorización siguiendo DDD
-- Implementación de la solución
-- Validación de arquitectura
+### ✅ Código Optimizado
+```java
+// 1 query optimizada
+@Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.reviews")
+List<Product> findAllWithReviews();
 
-### 5. **Validación Final** (1min)
-- Test verde
-- Métricas mejoradas
-- Demo del comportamiento corregido
+// Uso
+List<Product> products = productRepository.findAllWithReviews(); // 1 query
+return products.stream()
+    .map(ProductDTO::fromWithReviews)
+    .collect(Collectors.toList());
+```
 
-## 🚀 Tecnologías Stack
-
-### Backend
-- **Spring Boot 3.2** con Java 17
-- **Spring Data JPA** con H2/PostgreSQL
-- **Spring Security** para autenticación
-- **Resilience4j** para patrones de resiliencia
-- **Micrometer** para métricas
-- **Cucumber** para BDD
-- **JUnit 5** con Mockito
-
-### Herramientas de Desarrollo
-- **VS Code** con extensiones Java
-- **Spring Boot DevTools** para hot reload
-- **H2 Console** para debugging de BD
-- **Postman** para testing de APIs
-
-## 📈 Métricas de Éxito
+## 📈 Resultados Esperados
 
 ### Performance
-- **Latencia**: Reducción del 70%+ en tiempo de respuesta
-- **Throughput**: Aumento del 50%+ en requests/segundo
-- **Uso de memoria**: Reducción del 40%+ en consumo
+- **N+1**: ~2000ms para 30 productos
+- **Optimizado**: ~200ms para 30 productos
+- **Mejora**: ~90% más rápido
 
-### Quality
-- **Cobertura de tests**: 90%+ en todas las capas
-- **Código limpio**: Sin code smells, alta legibilidad
-- **Arquitectura**: Separación clara de responsabilidades
+### Consultas SQL
+- **N+1**: 31 queries (1 + 30)
+- **Optimizado**: 1 query
+- **Reducción**: 97% menos queries
 
-### User Experience
-- **Tiempo de respuesta**: <500ms para operaciones críticas
-- **Feedback visual**: Mensajes de error claros y útiles
-- **Consistencia**: Comportamiento predecible en todos los casos
+## 🎬 Guión para Video
 
-## 🎯 Resultado Final
+### 1. Introducción (30s)
+"Hoy vamos a resolver el problema N+1 en Spring Boot usando DDD"
 
-Al completar los 5 proyectos tendrás:
+### 2. Setup del proyecto (1min)
+- Mostrar estructura DDD
+- Explicar capas y responsabilidades
 
-✅ **Portfolio técnico** con casos reales de debugging
-✅ **Demostración de expertise** en Spring Boot y DDD
-✅ **Videos profesionales** mostrando debugging en vivo
-✅ **Código de calidad** listo para mostrar a empleadores
-✅ **Conocimiento profundo** de patrones de debugging
+### 3. Implementación con bug (2min)
+- Código que genera N+1
+- Ejecutar y mostrar problema
 
-## 📅 Cronograma Sugerido
+### 4. Debugging en vivo (3min)
+- Breakpoints condicionales
+- Logs de consultas SQL
+- Métricas de performance
 
-- **Semana 1**: Proyectos 1-2 (Catálogo y Reservas)
-- **Semana 2**: Proyectos 3-4 (Login y Pagos)
-- **Semana 3**: Proyecto 5 (Inventario) + Refinamiento
-- **Semana 4**: Grabación de videos + Documentación
+### 5. Solución DDD (2min)
+- Refactorización siguiendo DDD
+- EntityGraph y optimizaciones
 
-¿Listo para convertirte en un experto en debugging? 🚀
+### 6. Validación final (1min)
+- Tests pasando
+- Métricas mejoradas
+- Demo del resultado
+
+## 🎯 Aprendizajes Clave
+
+1. **DDD**: Separación clara de responsabilidades por capas
+2. **N+1 Problem**: Identificación y reproducción del problema
+3. **JOIN FETCH**: Solución técnica con JPA
+4. **Observabilidad**: Métricas y logging para debugging
+5. **Testing**: TDD y BDD para validar comportamiento
+
+## 📚 Recursos Adicionales
+
+- [Spring Boot Debugging Guide](https://spring.io/guides/gs/debugging/)
+- [JPA Best Practices](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
+- [DDD Reference](https://martinfowler.com/bliki/DomainDrivenDesign.html)
+- [N+1 Query Problem](https://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem-in-orm-object-relational-mapping)
+
+---
+
+**¿Listo para convertirte en un experto en debugging?** 🚀

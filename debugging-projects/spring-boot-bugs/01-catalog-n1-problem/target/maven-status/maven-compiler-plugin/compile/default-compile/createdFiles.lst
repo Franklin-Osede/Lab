@@ -1,0 +1,12 @@
+com/debugging/catalog/domain/model/Review.class
+com/debugging/catalog/domain/repository/ReviewRepository.class
+com/debugging/catalog/infrastructure/repository/JpaReviewRepository.class
+com/debugging/catalog/domain/repository/ProductRepository.class
+com/debugging/catalog/infrastructure/rest/ProductController.class
+com/debugging/catalog/application/usecase/ListProductsUseCase.class
+com/debugging/catalog/infrastructure/repository/JpaProductRepository.class
+com/debugging/catalog/application/usecase/ListProductsUseCase$PerformanceComparisonResult.class
+com/debugging/catalog/domain/model/Product.class
+com/debugging/catalog/application/dto/ProductDTO.class
+com/debugging/catalog/application/dto/ReviewDTO.class
+com/debugging/catalog/CatalogApplication.class
