@@ -202,7 +202,7 @@ contract DeFiLiquidityPoolTest is Test {
     }
     
     // Invariant: Pool should always maintain x*y >= k relationship
-    function invariant_ConstantProduct() public {
+    function invariant_ConstantProduct() public view {
         (uint256 reserveA, uint256 reserveB) = pool.getReserves();
         if (reserveA > 0 && reserveB > 0) {
             // After any operation, the product should not decrease significantly
